@@ -97,3 +97,26 @@ curl -X POST http://localhost:8000/leads/webhook \
   "timestamp": "2026-04-17T16:35:12.456Z"
 }
 ```
+
+---
+
+## Example Usage (Postman)
+
+1. Open Postman and create a **New Request**.
+2. Set the HTTP method to **POST**.
+3. Set the URL to: `http://localhost:8000/leads/webhook`
+4. Go to the **Headers** tab and ensure you have `Content-Type` set to `application/json`.
+5. Go to the **Body** tab, select **raw**, and choose **JSON** from the dropdown.
+6. Paste the following payload:
+```json
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@techcorp.com",
+  "company": "TechCorp Inc.",
+  "phone": "+1-555-0198"
+}
+```
+7. Click **Send** and you will receive the enriched JSON response.
+
+*Note: You can also use the auto-generated Swagger UI for testing by navigating to [http://localhost:8000/docs](http://localhost:8000/docs) in your browser.*

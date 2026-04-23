@@ -1,0 +1,33 @@
+Salesforce Lead Automation Explanation and Instructions
+
+How the Application Works
+
+The goal of this application is to automate the process of handling new leads coming from PlanHub. Instead of manually reviewing and converting these leads, the system does it automatically while preventing duplicate companies from being created.
+
+Step 1: Data Entry
+When a new lead is created in Salesforce, the system checks a custom field called Lead Source Detail. If the value in this field is exactly PlanHub, the automation begins. If it is anything else, the lead is saved normally and nothing else happens.
+
+Step 2: The Trigger and Handler
+An Apex Trigger listens for new leads being inserted. It passes the leads to a Handler class. The handler looks at the email address of the lead and extracts the domain name. For example, if the email is chris at brandnewdomain.com, it extracts brandnewdomain.com.
+
+Step 3: Account Matching and Creation
+The system then searches the Salesforce database to see if an Account already exists with that exact domain. 
+If a matching Account is found, the system remembers it.
+If no matching Account is found, the system automatically creates a brand new Account and fills in the domain field.
+
+Step 4: Lead Conversion
+The system instantly converts the lead. It attaches the new Contact to the matched or newly created Account. It also creates a new Opportunity, sets the stage to Prospecting, and sets the close date to 30 days from today.
+
+Step 5: Email Notification
+Finally, a Salesforce Flow is actively listening for any new Opportunity created in the Prospecting stage. When it sees one, it immediately sends an email alert to the designated sales team email address so they know a new PlanHub prospect is ready to be worked.
+
+Instructions for Testing
+
+To test the New Account scenario:
+Create a new Lead. Enter a First Name, Last Name, and Company. Enter an Email address with a completely new domain that is not in the system yet. Type PlanHub into the Lead Source Detail field. Save the record. It will convert into a new Account, Contact, and Opportunity.
+
+To test the Existing Account scenario:
+Create another new Lead. Enter a First Name and Last Name. Enter an Email address that uses the exact same domain you used in the first test. Type PlanHub into the Lead Source Detail field. Save the record. It will convert and attach as a second Contact under the Account you created in the first test.
+
+To test the Control Group scenario:
+Create a third new Lead. Fill out the required fields. Leave the Lead Source Detail field blank, or type something other than PlanHub. Save the record. It will remain a Lead and will not convert.

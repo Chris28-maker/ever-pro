@@ -31,3 +31,42 @@ Create another new Lead. Enter a First Name and Last Name. Enter an Email addres
 
 To test the Control Group scenario:
 Create a third new Lead. Fill out the required fields. Leave the Lead Source Detail field blank, or type something other than PlanHub. Save the record. It will remain a Lead and will not convert.
+
+----------------------------------------------------------------------
+
+Presentation Walkthrough Script (What to say during your presentation)
+
+Introduction:
+Hello team. Today I will walk you through the lead-to-opportunity automation I built for EverPro. The goal of this project was to automate the handling of incoming leads from PlanHub, eliminating manual data entry and preventing duplicate accounts.
+
+Architecture Overview:
+I built this using a combination of custom fields, an Apex Trigger, a Handler class, and a Salesforce Flow. 
+First, we added a custom field on the Lead object called Lead Source Detail to identify PlanHub leads, and a Domain field on the Account object.
+When a lead is created, an After Insert Apex trigger fires and passes the data to our handler class.
+
+The Logic:
+The handler filters for PlanHub leads and extracts the email domain. It then queries Salesforce to see if an Account with that domain already exists. If it does, we attach the lead to it. If it does not, we create a brand new Account. 
+Then, the code automatically converts the lead into a Contact and an Opportunity in the Prospecting stage.
+
+The Email Alert:
+Finally, a Record-Triggered Flow listens for new Opportunities in the Prospecting stage and sends an immediate email alert to the sales team so they can take action.
+
+Scaling for Production (Crucial point to mention):
+If you ask what I would change if this was going to production at scale:
+Currently, the lead conversion happens synchronously in the trigger. If we were loading 10,000 leads at once via an API or Data Loader, synchronous conversion could hit Salesforce CPU timeouts or lock errors. For massive production scale, I would move the conversion execution into a Queueable Apex class or an asynchronous Batch job so it does not hold up the initial Lead insertion transaction.
+
+----------------------------------------------------------------------
+
+Terminal Commands Used During Development (If they ask how you deployed it)
+
+1. npm install -g @salesforce/cli
+What it did: Installed the Salesforce Command Line Interface (CLI) on the machine.
+
+2. sf org login web -a MyDevOrg
+What it did: Authenticated the CLI with the Developer Org and gave it the alias MyDevOrg.
+
+3. sf project deploy start -o MyDevOrg
+What it did: Deployed the code, custom fields, and flow from the local computer to the Salesforce cloud.
+
+4. sf apex run -f scripts\apex\create_test_leads.apex -o MyDevOrg
+What it did: Ran the test script directly from the terminal to bypass UI caching and verify the backend logic worked perfectly.
